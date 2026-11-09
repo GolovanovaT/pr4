@@ -1,0 +1,14 @@
+{
+    // Використовуйте IntelliSense, щоб дізнатися про можливі атрибути.
+    // Наведіть курсор, щоб переглянути описи існуючих атрибутів.
+    // Для отримання додаткової інформації відвідайте: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "editor-browser",
+            "request": "launch",
+            "name": "Open index.html",
+            "url": "file:///d%3A/quiz/index.html"
+        }
+    ]
+}
