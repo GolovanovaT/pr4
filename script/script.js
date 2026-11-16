@@ -7,13 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextButton = document.querySelector("#next");
     const prevButton = document.querySelector("#prev");
     const sendButton = document.querySelector("#send");
-    let a=-2;
-    switch (true) {
-        case(a>0):console.log(1);
-        break;
-        case(a===3):console.log(3);
-        break;
-    };
 
     const questions = [
         {
@@ -68,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     url: './image/onion.png' 
                 }
             ],
-            type: 'radio'
+            type: 'checkbox'
         },
         {
             question: "Додати соус?",
@@ -90,22 +83,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     ];
 
-
-   btnOpenModal.addEventListener("click", () => {
+    btnOpenModal.addEventListener("click", () => {
         modalBlock.classList.add('d-block');
         playTest();
-
     });
 
     closeModal.addEventListener("click", () => {
         modalBlock.classList.remove("d-block");
-
     });
 
     const playTest = () => {
-
-        finalAnswers = [];
-
+        const finalAnswers = [];
         let numberQuestion = 0;
 
         const renderAnswers = (index) => {
@@ -118,53 +106,56 @@ document.addEventListener("DOMContentLoaded", () => {
                         <img class="answerImg" src="${answer.url}" alt="burger">
                         <span>${answer.title}</span>
                     </label>
-            `;
+                `;
                 formAnswers.appendChild(answerItem);
             });
         };
 
         const renderQuestions = (indexQuestion) => {
-            formAnswers.innerHTML = " ";
-            
-            if(numberQuestion >= 0 && numberQuestion < questions.length) {
-                questionTitle.textContent = `${questions[indexQuestion].question}`;
-                renderAnswers(indexQuestion);
-                sendButton.classList.add('d-none');
-                nextButton.classList.remove('d-none'); // Кнопка Next показується для всіх питань включно з останнім соусом
-            }
+            formAnswers.innerHTML = "";
 
-            // Керування кнопкою Prev
-            if(numberQuestion === 0) {
-                prevButton.classList.add('d-none');
-            } else {
-                prevButton.classList.remove('d-none');
-            }
+            switch (true) {
+                case (numberQuestion === 0):
+                    questionTitle.textContent = `${questions[indexQuestion].question}`;
+                    renderAnswers(indexQuestion);
+                    nextButton.classList.remove('d-none');
+                    prevButton.classList.add('d-none');
+                    sendButton.classList.add('d-none');
+                    break;
 
-            // Крок введення номера телефону (після всіх питань)
-            if(numberQuestion === questions.length) {
-                questionTitle.textContent = '';
-                nextButton.classList.add('d-none'); // Тілки тут приховуємо Next
-                prevButton.classList.remove('d-none'); // Кнопка Prev залишається доступною
-                sendButton.classList.remove('d-none'); // Показуємо кнопку Send
+                case (numberQuestion > 0 && numberQuestion <= questions.length - 1):
+                    questionTitle.textContent = `${questions[indexQuestion].question}`;
+                    renderAnswers(indexQuestion);
+                    nextButton.classList.remove('d-none');
+                    prevButton.classList.remove('d-none');
+                    sendButton.classList.add('d-none');
+                    break;
 
-                formAnswers.innerHTML = 
-                `<div class="input-group-prepend">
-                   <span class="input-group-text" id="NumberPhon">Введіть номер телефону</span>
-                </div>
-                 <input type="text" class="form-control" placeholder="Номер телефону" aria-label="Username" aria-describedby="basic-addon1" id="NumberPhon">
-                </div>`;
-            }
+                case (numberQuestion === questions.length):
+                    questionTitle.textContent = '';
+                    nextButton.classList.add('d-none');
+                    prevButton.classList.remove('d-none');
+                    sendButton.classList.remove('d-none');
 
-            if(numberQuestion === questions.length + 1) {
-                questionTitle.textContent = '';
-                nextButton.classList.add('d-none');
-                prevButton.classList.add('d-none');
-                sendButton.classList.add('d-none');
-                formAnswers.innerHTML ='Дякуємо за пройдене тестування! Наш менеджер зателефонує!';
+                    formAnswers.innerHTML = `
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="NumberPhon">Введіть номер телефону</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Номер телефону" aria-label="Username" aria-describedby="basic-addon1" id="NumberPhon">
+                        </div>`;
+                    break;
 
-                setTimeout(() => {
-                    modalBlock.classList.remove("d-block");
-                }, 2000);
+                case (numberQuestion === questions.length + 1):
+                    nextButton.classList.add('d-none');
+                    prevButton.classList.add('d-none');
+                    sendButton.classList.add('d-none');
+                    formAnswers.innerHTML = 'Дякуємо за вибір! Наш менеджер зателефонує!';
+
+                    setTimeout(() => {
+                        modalBlock.classList.remove("d-block");
+                    }, 2000);
+                    break;
             }
         };
 
